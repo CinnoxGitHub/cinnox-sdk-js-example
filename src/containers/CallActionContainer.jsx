@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 
-import Box from '@mui/material/Box';
 import PhonePausedIcon from '@mui/icons-material/PhonePaused';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 
+import CallActionLayout from '../components/CallActionLayout';
 import CallViewButton from '../components/CallViewButton';
 import useCallAction from '../hooks/useCallAction';
 import { getSDK } from '../utils/sdkHelper';
@@ -51,12 +51,21 @@ const CallActionContainer = (props) => {
     </CallViewButton>
   );
 
+  const buttonList = [{
+    key: 'hold',
+    button: holdButton,
+  }, {
+    key: 'mute',
+    button: muteButton,
+  }, {
+    key: 'hangup',
+    button: hangupButton,
+  }];
+
   return (
-    <Box>
-      {holdButton}
-      {muteButton}
-      {hangupButton}
-    </Box>
+    <CallActionLayout
+      buttonList={buttonList}
+    />
   );
 };
 

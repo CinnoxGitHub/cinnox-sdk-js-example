@@ -7,13 +7,12 @@ import Button from '@mui/material/Button';
 
 const LoginForm = (props) => {
   const { onSubmit } = props;
-  const [service, setServiceName] = useState('');
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = useCallback(() => {
-    onSubmit({ service, account, password });
-  }, [onSubmit, service, account, password]);
+    onSubmit({ account, password });
+  }, [onSubmit, account, password]);
 
   return (
     <Box
@@ -21,12 +20,6 @@ const LoginForm = (props) => {
       display="flex"
       gap={(theme) => theme.spacing(1)}
     >
-      <TextField
-        value={service}
-        onChange={(event) => setServiceName(event.target.value)}
-        label="Service"
-        autoComplete="off"
-      />
       <TextField
         value={account}
         onChange={(event) => setAccount(event.target.value)}

@@ -1,26 +1,29 @@
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 
+import CallHeader from '../components/CallHeader';
+import CallBody from '../components/CallBody';
 import CallActionContainer from './CallActionContainer';
 
 const CallViewContainer = (props) => {
   const { callInfo } = props;
+  const { status } = callInfo;
 
   return (
-    <Box>
-      <Box>
+    <Box width={282} height={544} bgcolor={(theme) => theme.palette.grey[900]}>
+      <Box height={36}>
         {/* add call top bar here */}
       </Box>
-      <Box>
-        {/* add call header here */}
+      <Box height={144}>
+        <CallHeader callStatus={status} />
       </Box>
-      <Box>
-        {/* add call body here */}
+      <Box height={160}>
+        <CallBody />
       </Box>
-      <Box>
+      <Box height={172}>
         <CallActionContainer callInfo={callInfo} />
       </Box>
-      <Box>
+      <Box height={30}>
         {/* add call footer here */}
       </Box>
     </Box>
