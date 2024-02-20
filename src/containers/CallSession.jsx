@@ -42,7 +42,7 @@ const CallSession = (props) => {
     const SDK = getSDK();
     let session;
 
-    if (!sessionId) {
+    if (sessionId) {
       session = SDK.call.getSessionBySessionId(sessionId);
       session.on('CONNECTED', handleCallConnected);
       session.on('TERMINATED', handleCallTerminated);
@@ -51,7 +51,9 @@ const CallSession = (props) => {
     }
 
     return () => {
-      session.removeAllListener();
+      if(session) {
+        session.removeAllListeners();
+      }
     }
   }, [sessionId, handleCallConnected, handleCallTerminated, handleCallCancel, handleCallHoldChange]);
 

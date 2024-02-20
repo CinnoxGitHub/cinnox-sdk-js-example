@@ -1,4 +1,7 @@
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+
+import CallActionContainer from './CallActionContainer';
 
 const CallViewContainer = (props) => {
   const { callInfo } = props;
@@ -15,13 +18,17 @@ const CallViewContainer = (props) => {
         {/* add call body here */}
       </Box>
       <Box>
-        {/* add call action here */}
+        <CallActionContainer callInfo={callInfo} />
       </Box>
       <Box>
         {/* add call footer here */}
       </Box>
     </Box>
   );
+};
+
+CallViewContainer.propTypes = {
+  callInfo: PropTypes.object.isRequired,
 };
 
 export default CallViewContainer;

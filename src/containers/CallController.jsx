@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { generateOnNetCallOptions } from 'm800-liveconnect-sdk/cinnox-sdk-js';
 
 import CallSession from './CallSession';
@@ -20,11 +20,12 @@ const CallController = (props) => {
     const SDK = getSDK();
     const callOutOptions = generateOnNetCallOptions(targetEid);
     const callOutResult = await SDK.call.callOut(callOutOptions);
-    const { sessionId, sessionInstance } = callOutResult;
+
+    const { sessionId, session } = callOutResult;
     const newCallInfo = {
       ...defaultCallInfo,
-      isMute: sessionInstance.isMuted(),
-      isHold: sessionInstance.isHold(),
+      isMute: session.isMuted(),
+      isHold: session.isHold(),
       sessionId,
     }
     setCallInfoList((prevCallInfoList) => {
@@ -43,6 +44,25 @@ const CallController = (props) => {
       return newCallInfoList;
     });
   }, []);
+
+  const handleCallRemoved = useCallback((eventPayload) => {
+    const { sessionId } = eventPayload;
+
+    setTimeout(() => {
+      setCallInfoList((prevCallInfoList) => {
+        return prevCallInfoList.filter((callInfo) => callInfo.sessionId !== sessionId);
+      });
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
+    const SDK = getSDK();
+    SDK.call.on('CALL_REMOVE', handleCallRemoved);
+
+    return () => {
+      SDK.call.off('CALL_REMOVE', handleCallRemoved);
+    }
+  }, [handleCallRemoved]);
 
   return (
     <CallContext.Provider value={{ callInfoList, callOut, updateCallInfoBySessionId }}>
