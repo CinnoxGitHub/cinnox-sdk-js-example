@@ -1,11 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import LoginForm from '../components/LoginForm';
 import UserSection from '../components/UserSection';
 import { initSDK } from '../utils/sdkHelper';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const AuthContainer = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const { isLogin, setIsLogin } = useAuthContext();
 
   const handleLogin = useCallback(async (payload) => {
     const { service, account, password } = payload;
@@ -15,7 +16,7 @@ const AuthContainer = () => {
     window.SDK = SDK;
 
     setIsLogin(true);
-  }, []);
+  }, [setIsLogin]);
 
   if (!isLogin) {
     return (

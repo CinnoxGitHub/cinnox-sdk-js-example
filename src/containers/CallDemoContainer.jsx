@@ -1,21 +1,28 @@
 import { useCallback } from 'react';
-import { generateOnNetCallOptions } from 'm800-liveconnect-sdk/cinnox-sdk-js';
+import { isEmpty } from 'lodash-es';
 import Box from '@mui/material/Box';
 
 import CallOutForm from '../components/CallOutForm';
-import { getSDK } from '../utils/sdkHelper';
+import CallViewContainer from './CallViewContainer';
+import { useCallContext } from '../contexts/CallContext';
 
 const CallDemoContainer = () => {
+  const { callInfoList, callOut } = useCallContext();
+
   const handleCallOut = useCallback(async (payload) => {
-    const { targetEid } = payload;
-    const SDK = getSDK();
-    const callOutOptions = generateOnNetCallOptions(targetEid);
-    await SDK.call.callOut(callOutOptions);
-  }, []);
+    callOut(payload);
+  }, [callOut]);
 
   return (
     <Box>
-      <CallOutForm onCallOut={handleCallOut} />
+      <Box>
+        <CallOutForm onCallOut={handleCallOut} />
+      </Box>
+      {!isEmpty(callInfoList) && (
+        <Box>
+          <CallViewContainer callInfo={callInfoList[0]} />
+        </Box>
+      )}
     </Box>
   );
 };
