@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { generateOnNetCallOptions } from 'm800-liveconnect-sdk/cinnox-sdk-js';
+import { generateOnNetCallOptions, generateOffNetCallOptions } from 'm800-liveconnect-sdk/cinnox-sdk-js';
 
 import CallSession from './CallSession';
 import { getSDK } from '../utils/sdkHelper';
@@ -16,9 +16,19 @@ const CallController = (props) => {
   const [callInfoList, setCallInfoList] = useState([]);
 
   const callOut = useCallback(async (payload) => {
-    const { targetEid } = payload;
+    const { targetEid, targetPhoneNumber } = payload;
     const SDK = getSDK();
-    const callOutOptions = generateOnNetCallOptions(targetEid);
+    let callOutOptions;
+
+    if (targetEid) {
+      callOutOptions = generateOnNetCallOptions(targetEid);
+    } else {
+      const apiResult = await SDK.call.getStaffCallerNumberList();
+      const { result: callerNumberList } = apiResult;
+
+      callOutOptions = generateOffNetCallOptions(targetPhoneNumber, callerNumberList[0].number);
+    }
+
     const callOutResult = await SDK.call.callOut(callOutOptions);
 
     const { sessionId, session } = callOutResult;
