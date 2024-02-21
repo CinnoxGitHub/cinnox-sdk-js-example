@@ -25,7 +25,7 @@ const CallOutForm = (props) => {
 
   const handleCallOut = useCallback(() => {
     let payload = {};
-    if (setSelectedCallType === CALL_TYPES.ON_NET) {
+    if (selectedCallType === CALL_TYPES.ON_NET) {
       payload = { targetEid };
     } else if (selectedCallType === CALL_TYPES.OFF_NET) {
       payload = { targetPhoneNumber };

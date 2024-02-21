@@ -22,6 +22,13 @@ const CallSession = (props) => {
     }))
   }, [sessionId, updateCallInfoBySessionId]);
 
+  const handleCallAnswering = useCallback(() => {
+    updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
+      ...prevCallInfo,
+      status: 'ANSWERING',
+    }));
+  }, [sessionId, updateCallInfoBySessionId]);
+
   const handleCallCancel = useCallback(() => {
     updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
       ...prevCallInfo,
@@ -44,6 +51,7 @@ const CallSession = (props) => {
 
     if (sessionId) {
       session = SDK.call.getSessionBySessionId(sessionId);
+      session.on('ANSWERING', handleCallAnswering);
       session.on('CONNECTED', handleCallConnected);
       session.on('TERMINATED', handleCallTerminated);
       session.on('CANCEL', handleCallCancel);
@@ -55,7 +63,7 @@ const CallSession = (props) => {
         session.removeAllListeners();
       }
     }
-  }, [sessionId, handleCallConnected, handleCallTerminated, handleCallCancel, handleCallHoldChange]);
+  }, [sessionId, handleCallConnected, handleCallTerminated, handleCallCancel, handleCallHoldChange, handleCallAnswering]);
 
   return null;
 };

@@ -43,12 +43,26 @@ const useCallAction = () => {
     await session.hangup();
   }, []);
 
+  const answer = useCallback(async (sessionId) => {
+    const SDK = getSDK();
+    const session = SDK.call.getSessionBySessionId(sessionId);
+    await session.answerCall();
+  }, []);
+
+  const reject = useCallback(async (sessionId) => {
+    const SDK = getSDK();
+    const session = SDK.call.getSessionBySessionId(sessionId);
+    await session.rejectCall();
+  }, []);
+
   return {
     mute,
     unmute,
     hold,
     unhold,
     hangup,
+    answer,
+    reject,
   };
 };
 
