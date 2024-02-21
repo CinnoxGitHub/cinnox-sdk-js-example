@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import AppLayout from './components/AppLayout';
+import AuthProvider from './containers/AuthProvider';
+import AuthContainer from './containers/AuthContainer';
+import CallController from './containers/CallController';
+import CallDemoContainer from './containers/CallDemoContainer';
+
+const theme = createTheme();
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          {({ isLogin }) => {
+            return (
+              <AppLayout
+                loginSection={<AuthContainer />}
+                callDemoSection={isLogin && (
+                  <CallController>
+                    <CallDemoContainer />
+                  </CallController>
+                )}
+              />
+            )
+          }}
+        </AuthProvider>
+      </ThemeProvider>
     </div>
   );
 }
