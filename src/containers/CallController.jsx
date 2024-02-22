@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { generateOnNetCallOptions, generateOffNetCallOptions } from 'm800-liveconnect-sdk/cinnox-sdk-js';
+import { generateOnNetCallOptions, generateOffNetCallOptions } from 'cinnox-sdk-js';
 
 import CallSession from './CallSession';
 import { getSDK } from '../utils/sdkHelper';
