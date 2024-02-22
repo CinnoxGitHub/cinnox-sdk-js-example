@@ -1,4 +1,4 @@
-import CinnoxSDK from 'm800-liveconnect-sdk/cinnox-sdk-js';
+import CinnoxSDK from 'cinnox-sdk-js';
 
 /**
  * @type {CinnoxSDK}
