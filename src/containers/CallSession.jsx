@@ -12,6 +12,7 @@ const CallSession = (props) => {
     updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
       ...prevCallInfo,
       status: 'CONNECTED',
+      connectedAt: Date.now(),
     }));
   }, [sessionId, updateCallInfoBySessionId]);
 
@@ -19,7 +20,15 @@ const CallSession = (props) => {
     updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
       ...prevCallInfo,
       status: 'TERMINATED',
+      terminatedAt: Date.now(),
     }))
+  }, [sessionId, updateCallInfoBySessionId]);
+
+  const handleCallAnswering = useCallback(() => {
+    updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
+      ...prevCallInfo,
+      status: 'ANSWERING',
+    }));
   }, [sessionId, updateCallInfoBySessionId]);
 
   const handleCallCancel = useCallback(() => {
@@ -44,6 +53,7 @@ const CallSession = (props) => {
 
     if (sessionId) {
       session = SDK.call.getSessionBySessionId(sessionId);
+      session.on('ANSWERING', handleCallAnswering);
       session.on('CONNECTED', handleCallConnected);
       session.on('TERMINATED', handleCallTerminated);
       session.on('CANCEL', handleCallCancel);
@@ -55,7 +65,7 @@ const CallSession = (props) => {
         session.removeAllListeners();
       }
     }
-  }, [sessionId, handleCallConnected, handleCallTerminated, handleCallCancel, handleCallHoldChange]);
+  }, [sessionId, handleCallConnected, handleCallTerminated, handleCallCancel, handleCallHoldChange, handleCallAnswering]);
 
   return null;
 };

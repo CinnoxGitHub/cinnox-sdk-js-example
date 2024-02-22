@@ -9,6 +9,9 @@ const defaultCallInfo = {
   isMute: false,
   isHold: false,
   status: 'CALLING',
+  sessionId: '',
+  connectedAt: 0,
+  terminatedAt: 0,
 }
 
 const CallController = (props) => {
@@ -37,6 +40,7 @@ const CallController = (props) => {
       isMute: session.isMuted(),
       isHold: session.isHold(),
       sessionId,
+      status: 'CALLING',
     }
     setCallInfoList((prevCallInfoList) => {
       return [...prevCallInfoList, newCallInfo];
@@ -65,14 +69,33 @@ const CallController = (props) => {
     }, 3000);
   }, []);
 
+  const handleIncomingCall = useCallback((eventPayload) => {
+    const { sessionId } = eventPayload;
+    const SDK = getSDK();
+    const session = SDK.call.getSessionBySessionId(sessionId);
+    const newCallInfo = {
+      ...defaultCallInfo,
+      isMute: session.isMuted(),
+      isHold: session.isHold(),
+      sessionId,
+      status: 'RINGING',
+    }
+
+    setCallInfoList((prevCallInfoList) => {
+      return [...prevCallInfoList, newCallInfo];
+    });
+  }, []);
+
   useEffect(() => {
     const SDK = getSDK();
+    SDK.call.on('CALL_INVITE', handleIncomingCall);
     SDK.call.on('CALL_REMOVE', handleCallRemoved);
 
     return () => {
+      SDK.call.off('CALL_INVITE', handleIncomingCall);
       SDK.call.off('CALL_REMOVE', handleCallRemoved);
     }
-  }, [handleCallRemoved]);
+  }, [handleCallRemoved, handleIncomingCall]);
 
   return (
     <CallContext.Provider value={{ callInfoList, callOut, updateCallInfoBySessionId }}>

@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 
 import PhonePausedIcon from '@mui/icons-material/PhonePaused';
+import PhoneIcon from '@mui/icons-material/Phone';
+
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
@@ -12,8 +14,8 @@ import { getSDK } from '../utils/sdkHelper';
 
 const CallActionContainer = (props) => {
   const { callInfo } = props;
-  const { sessionId, isMute, isHold } = callInfo;
-  const { mute, unmute, unhold, hold, hangup } = useCallAction();
+  const { sessionId, isMute, isHold, status } = callInfo;
+  const { mute, unmute, unhold, hold, hangup, answer, reject } = useCallAction();
 
   const handleHoldClick = useCallback(() => {
     isHold ? unhold(sessionId) : hold(sessionId)
@@ -26,6 +28,14 @@ const CallActionContainer = (props) => {
   const handleHangupClick = useCallback(() => {
     hangup(sessionId);
   }, [hangup, sessionId]);
+
+  const handleAnswerClick = useCallback(() => {
+    answer(sessionId);
+  }, [answer, sessionId]);
+
+  const handleRejectClick = useCallback(() => {
+    reject(sessionId);
+  }, [reject, sessionId]);
 
   const SDK = getSDK();
   const session = SDK.call.getSessionBySessionId(sessionId);
@@ -51,16 +61,36 @@ const CallActionContainer = (props) => {
     </CallViewButton>
   );
 
-  const buttonList = [{
-    key: 'hold',
-    button: holdButton,
-  }, {
-    key: 'mute',
-    button: muteButton,
-  }, {
-    key: 'hangup',
-    button: hangupButton,
-  }];
+  const answerButton = (
+    <CallViewButton onClick={handleAnswerClick}>
+      <PhoneIcon />
+    </CallViewButton>
+  );
+
+  const rejectButton = (
+    <CallViewButton onClick={handleRejectClick}>
+      <CallEndIcon />
+    </CallViewButton>
+  );
+
+  const buttonList = status === 'RINGING'
+    ? [{
+      key: 'reject',
+      button: rejectButton,
+    }, {
+      key: 'answer',
+      button: answerButton,
+    }]
+    : [{
+      key: 'hold',
+      button: holdButton,
+    }, {
+      key: 'mute',
+      button: muteButton,
+    }, {
+      key: 'hangup',
+      button: hangupButton,
+    }];
 
   return (
     <CallActionLayout

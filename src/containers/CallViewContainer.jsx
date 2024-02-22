@@ -7,7 +7,7 @@ import CallActionContainer from './CallActionContainer';
 
 const CallViewContainer = (props) => {
   const { callInfo } = props;
-  const { status } = callInfo;
+  const { status, connectedAt, terminatedAt } = callInfo;
 
   return (
     <Box width={282} height={544} bgcolor={(theme) => theme.palette.grey[900]}>
@@ -15,7 +15,7 @@ const CallViewContainer = (props) => {
         {/* add call top bar here */}
       </Box>
       <Box height={144}>
-        <CallHeader callStatus={status} />
+        <CallHeader callStatus={status} connectedAt={connectedAt} terminatedAt={terminatedAt} />
       </Box>
       <Box height={160}>
         <CallBody />

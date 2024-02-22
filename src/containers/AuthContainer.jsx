@@ -13,7 +13,7 @@ const AuthContainer = () => {
   const handleLogin = useCallback(async (payload) => {
     const { account, password } = payload;
     const SDK = getSDK();
-    await SDK.login(account, password);
+    await SDK.auth.login(account, password);
 
     setIsLogin(true);
   }, [setIsLogin]);
@@ -22,7 +22,6 @@ const AuthContainer = () => {
     const { service } = payload;
     const SDK = initSDK({ service });
     await SDK.initialize();
-    window.SDK = SDK;
 
     const idToken = SDK.auth.getIdToken();
     if (idToken?.eid) {
