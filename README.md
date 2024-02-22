@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# Cinnox SDK Quick Start Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Cinnox SDK is a software development kit (SDK) that allows you to integrate Cinnox's real-time voice communication features into your web application. This guide will help you get started with the Cinnox SDK by walking you through the installation process and showing you how to make a simple voice call.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+### Package Manager
 
-### `npm start`
+Using npm:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install cinnox-sdk-js
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Using yarn:
 
-### `npm test`
+```bash
+yarn add cinnox-sdk-js
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Example
 
-### `npm run build`
+### Initialize the SDK
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Before you use the call feature, you need to initialize the SDK with your cinnox service name.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```javascript
+import CinnoxSDK from 'cinnox-sdk-js';
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+const cinnoxSDK = new CinnoxSDK({
+  service: 'your-cinnox-service-name',
+});
+await cinnoxSDK.initialize();
+```
 
-### `npm run eject`
+### Login
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To make a call, you need to log in to the Cinnox server.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+cinnoxSDK.auth.login('your-account', 'your-password');
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Making an On-Net Voice Call
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To make an on-net voice call, you can create a call options object by `generateOnNetCallOptions` and pass it to `callOut`.
 
-## Learn More
+```javascript
+import { generateOnNetCallOptions } from 'cinnox-sdk-js';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const callOptions = generateOnNetCallOptions('target-eid');
+const callOutResult = await cinnoxSDK.call.callOut(callOptions);
+const { session } = callOutResult;
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Making an Off-Net Voice Call
 
-### Code Splitting
+To make an off-net voice call, you can create a call options object by `generateOffNetCallOptions` and pass it to `callOut`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```javascript
+import { generateOffNetCallOptions } from 'cinnox-sdk-js';
 
-### Analyzing the Bundle Size
+const callOptions = generateOffNetCallOptions('target-phone-number', 'caller-number');
+const callOutResult = await cinnoxSDK.call.callOut(callOptions);
+const { session } = callOutResult;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Listen for Call Session Event
 
-### Making a Progressive Web App
+You can listen for call session events by adding event listeners to the session object.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+session.on('CONNECTED', () => {
+  console.log('Call Connected');
+});
+```
 
-### Advanced Configuration
+### Listen for Call Manager Event
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+You can listen for call manager events by adding event listeners to the call manager object.
 
-### Deployment
+```javascript
+cinnoxSDK.call.on('CALL_INVITE', (incomingCall) => {
+  console.log('Incoming Call');
+});
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## API Document
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For more API information about the Cinnox SDK, please refer to the [API document](https://cinnoxgithub.github.io/cinnox-sdk-js-example/index.html).
