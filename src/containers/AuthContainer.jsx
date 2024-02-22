@@ -13,7 +13,7 @@ const AuthContainer = () => {
   const handleLogin = useCallback(async (payload) => {
     const { account, password } = payload;
     const SDK = getSDK();
-    await SDK.login(account, password);
+    await SDK.auth.login(account, password);
 
     setIsLogin(true);
   }, [setIsLogin]);
