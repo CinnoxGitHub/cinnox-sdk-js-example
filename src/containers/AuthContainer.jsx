@@ -22,7 +22,6 @@ const AuthContainer = () => {
     const { service } = payload;
     const SDK = initSDK({ service });
     await SDK.initialize();
-    window.SDK = SDK;
 
     const idToken = SDK.auth.getIdToken();
     if (idToken?.eid) {

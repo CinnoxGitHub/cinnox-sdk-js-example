@@ -9,6 +9,9 @@ const defaultCallInfo = {
   isMute: false,
   isHold: false,
   status: 'CALLING',
+  sessionId: '',
+  connectedAt: 0,
+  terminatedAt: 0,
 }
 
 const CallController = (props) => {
@@ -37,6 +40,7 @@ const CallController = (props) => {
       isMute: session.isMuted(),
       isHold: session.isHold(),
       sessionId,
+      status: 'CALLING',
     }
     setCallInfoList((prevCallInfoList) => {
       return [...prevCallInfoList, newCallInfo];

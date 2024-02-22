@@ -12,6 +12,7 @@ const CallSession = (props) => {
     updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
       ...prevCallInfo,
       status: 'CONNECTED',
+      connectedAt: Date.now(),
     }));
   }, [sessionId, updateCallInfoBySessionId]);
 
@@ -19,6 +20,7 @@ const CallSession = (props) => {
     updateCallInfoBySessionId(sessionId, (prevCallInfo) => ({
       ...prevCallInfo,
       status: 'TERMINATED',
+      terminatedAt: Date.now(),
     }))
   }, [sessionId, updateCallInfoBySessionId]);
 
