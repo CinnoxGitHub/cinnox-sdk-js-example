@@ -4,10 +4,16 @@ import PropTypes from 'prop-types';
 import CallHeader from '../components/CallHeader';
 import CallBody from '../components/CallBody';
 import CallActionContainer from './CallActionContainer';
+import Audio from './Audio';
+import { getSDK } from '../utils/sdkHelper';
 
 const CallViewContainer = (props) => {
   const { callInfo } = props;
-  const { status, connectedAt, terminatedAt } = callInfo;
+  const { status, connectedAt, terminatedAt, sessionId } = callInfo;
+
+  const SDK = getSDK();
+  const session = SDK.call.getSessionBySessionId(sessionId);
+  const remoteStream = session?.streams?.remote;
 
   return (
     <Box width={282} height={544} bgcolor={(theme) => theme.palette.grey[900]}>
@@ -19,6 +25,7 @@ const CallViewContainer = (props) => {
       </Box>
       <Box height={160}>
         <CallBody />
+        <Audio stream={remoteStream} />
       </Box>
       <Box height={172}>
         <CallActionContainer callInfo={callInfo} />
