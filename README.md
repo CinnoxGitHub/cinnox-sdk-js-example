@@ -85,6 +85,28 @@ cinnoxSDK.call.on('CALL_INVITE', (incomingCall) => {
 });
 ```
 
+### Answer an Incoming Call
+
+To answer an incoming call, you can call `answer` on the incoming call object.
+
+```javascript
+const session = cinnoxSDK.call.getSessionBySessionId(incomingCall.sessionId);
+session.answerCall();
+```
+
+### Play Call Sound
+
+To play the call sound, you can get the media stream in the session object and play it after call connected.
+
+```javascript
+const session = cinnoxSDK.call.getSessionBySessionId(sessionId);
+const remoteStream = session.streams.remote;
+
+const audio = new Audio();
+audio.srcObject = remoteStream;
+audio.play();
+```
+
 ## API Document
 
 For more API information about the Cinnox SDK, please refer to the [API document](https://cinnoxgithub.github.io/cinnox-sdk-js-example/index.html).
