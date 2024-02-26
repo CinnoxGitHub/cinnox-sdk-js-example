@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 
 import CallKeypadLayout from '../components/CallKeypadLayout';
@@ -78,6 +79,14 @@ const CallKeypadContainer = (props) => {
   return (
     <CallKeypadLayout buttonList={buttonList} footerButtonList={footerButtonList} />
   )
+};
+
+CallKeypadContainer.defaultProps = {
+  sessionId: '',
+};
+
+CallKeypadContainer.propTypes = {
+  sessionId: PropTypes.string,
 };
 
 export default CallKeypadContainer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -45,6 +46,22 @@ const CallViewButton = (props) => {
       </Box>
     </StyledIconButton>
   );
+};
+
+CallViewButton.defaultProps = {
+  active: false,
+  disabled: false,
+  description: '',
+  onClick: () => {},
+  children: null,
+};
+
+CallViewButton.propTypes = {
+  active: PropTypes.bool,
+  disabled: PropTypes.bool,
+  description: PropTypes.string,
+  onClick: PropTypes.func,
+  children: PropTypes.node,
 };
 
 export default CallViewButton;
