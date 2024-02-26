@@ -47,7 +47,7 @@ const CallActionContainer = (props) => {
 
   const SDK = getSDK();
   const session = SDK.call.getSessionBySessionId(sessionId);
-  const { remoteHold } = session?.getHoldState() || {};
+  const { remoteHold } = (session && session.getHoldState()) || {};
 
   const holdButton = (
     <CallViewButton onClick={handleHoldClick} active={isHold} disabled={remoteHold}>
@@ -104,7 +104,7 @@ const CallActionContainer = (props) => {
     }, {
       key: 'keypad',
       button: keypadButton,
-    },{
+    }, {
       key: 'hangup',
       button: hangupButton,
     }];
