@@ -58,11 +58,7 @@ const useCallAction = () => {
   const sendDtmf = useCallback(async (sessionId, signal) => {
     const SDK = getSDK();
     const session = SDK.call.getSessionBySessionId(sessionId);
-    try {
-      await session.sendDtmf(signal);
-    } catch (error) {
-      console.log({ error });
-    }
+    await session.sendDtmf(signal);
   }, []);
 
   return {
