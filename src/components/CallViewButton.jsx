@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 
 const StyledIconButton = styled(IconButton, {
@@ -7,6 +8,8 @@ const StyledIconButton = styled(IconButton, {
   const { theme, active, disabled } = params;
 
   return {
+    width: 48,
+    height: 48,
     color: theme.palette.common.white,
     backgroundColor: theme.palette.grey['900'],
     borderRadius: '50%',
@@ -30,11 +33,16 @@ const StyledIconButton = styled(IconButton, {
 });
 
 const CallViewButton = (props) => {
-  const { onClick, children, active, disabled } = props;
+  const { onClick, children, active, disabled, description } = props;
 
   return (
     <StyledIconButton onClick={onClick} active={active} disabled={disabled}>
-      {children}
+      <Box>
+        <Box display="flex" justifyContent="center">
+          {children}
+        </Box>
+        {description && <Box fontSize={10}>{description}</Box>}
+      </Box>
     </StyledIconButton>
   );
 };
