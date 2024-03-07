@@ -55,6 +55,12 @@ const useCallAction = () => {
     await session.rejectCall();
   }, []);
 
+  const sendDtmf = useCallback(async (sessionId, signal) => {
+    const SDK = getSDK();
+    const session = SDK.call.getSessionBySessionId(sessionId);
+    await session.sendDtmf(signal);
+  }, []);
+
   return {
     mute,
     unmute,
@@ -63,6 +69,7 @@ const useCallAction = () => {
     hangup,
     answer,
     reject,
+    sendDtmf,
   };
 };
 

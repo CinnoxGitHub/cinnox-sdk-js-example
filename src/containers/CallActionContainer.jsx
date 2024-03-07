@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import PhonePausedIcon from '@mui/icons-material/PhonePaused';
 import PhoneIcon from '@mui/icons-material/Phone';
-
+import DialpadIcon from '@mui/icons-material/Dialpad';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
@@ -10,12 +10,14 @@ import CallEndIcon from '@mui/icons-material/CallEnd';
 import CallActionLayout from '../components/CallActionLayout';
 import CallViewButton from '../components/CallViewButton';
 import useCallAction from '../hooks/useCallAction';
+import { useCallViewContext } from '../contexts/CallViewContext';
 import { getSDK } from '../utils/sdkHelper';
 
 const CallActionContainer = (props) => {
   const { callInfo } = props;
   const { sessionId, isMute, isHold, status } = callInfo;
   const { mute, unmute, unhold, hold, hangup, answer, reject } = useCallAction();
+  const { isKeypadOpen, updateCallViewState } = useCallViewContext();
 
   const handleHoldClick = useCallback(() => {
     isHold ? unhold(sessionId) : hold(sessionId)
@@ -37,9 +39,15 @@ const CallActionContainer = (props) => {
     reject(sessionId);
   }, [reject, sessionId]);
 
+  const handleKeypadClick = useCallback(() => {
+    updateCallViewState((prevState) => ({
+      isKeypadOpen: true,
+    }));
+  }, [updateCallViewState]);
+
   const SDK = getSDK();
   const session = SDK.call.getSessionBySessionId(sessionId);
-  const { remoteHold } = session?.getHoldState() || {};
+  const { remoteHold } = (session && session.getHoldState()) || {};
 
   const holdButton = (
     <CallViewButton onClick={handleHoldClick} active={isHold} disabled={remoteHold}>
@@ -73,6 +81,12 @@ const CallActionContainer = (props) => {
     </CallViewButton>
   );
 
+  const keypadButton = (
+    <CallViewButton active={isKeypadOpen} onClick={handleKeypadClick}>
+      <DialpadIcon />
+    </CallViewButton>
+  );
+
   const buttonList = status === 'RINGING'
     ? [{
       key: 'reject',
@@ -87,6 +101,9 @@ const CallActionContainer = (props) => {
     }, {
       key: 'mute',
       button: muteButton,
+    }, {
+      key: 'keypad',
+      button: keypadButton,
     }, {
       key: 'hangup',
       button: hangupButton,

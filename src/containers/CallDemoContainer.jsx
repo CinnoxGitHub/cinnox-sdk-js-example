@@ -20,7 +20,7 @@ const CallDemoContainer = () => {
       </Box>
       {!isEmpty(callInfoList) && (
         <Box>
-          <CallViewContainer callInfo={callInfoList[0]} />
+          <CallViewContainer key={callInfoList[0]?.sessionId} callInfo={callInfoList[0]} />
         </Box>
       )}
     </Box>
